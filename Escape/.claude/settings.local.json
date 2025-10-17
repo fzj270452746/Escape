@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xcodebuild:*)",
+      "Bash(pod install)",
+      "Bash(LANG=en_US.UTF-8 pod install:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
