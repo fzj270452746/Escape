@@ -1,5 +1,5 @@
 //
-//  PingMuGongJu.swift
+//  AlatSkrin.swift
 //  Escape
 //
 //  Created by Hades on 10/17/25.
@@ -8,7 +8,7 @@
 import UIKit
 
 // 屏幕工具类 - 用于适配不同屏幕尺寸
-class PingMuGongJu {
+class AlatSkrin {
     // 获取屏幕宽度
     static var kuanDu: CGFloat {
         return UIScreen.main.bounds.width

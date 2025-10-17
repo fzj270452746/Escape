@@ -1,5 +1,5 @@
 //
-//  DiTuXuanZeShiTu.swift
+//  PaparanPemilihPeta.swift
 //  Escape
 //
 //  Created by Hades on 10/17/25.
@@ -9,13 +9,13 @@ import UIKit
 import SnapKit
 
 // 地图选择视图控制器
-class DiTuXuanZeShiTu: UIViewController {
+class PaparanPemilihPeta: UIViewController {
     private let beiJingTuCeng = CAGradientLayer()
     private let biaoTiLabel = UILabel()
-    private let fanHuiAnNiu = YouXiAnNiu(biaoTi: "← Back", yangShi: .ciYao)
+    private let fanHuiAnNiu = ButangPermainan(tajuk: "← Back", gaya: .kedua)
     private let lieBiaoShiTu = UITableView()
 
-    private let youXiGuanLi = YouXiGuanLiQi.gongXiang
+    private let pengurusPermainan = PengurusPermainan.gongXiang
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,7 +62,7 @@ class DiTuXuanZeShiTu: UIViewController {
         lieBiaoShiTu.dataSource = self
         lieBiaoShiTu.backgroundColor = .clear
         lieBiaoShiTu.separatorStyle = .none
-        lieBiaoShiTu.register(DiTuDanYuanGe.self, forCellReuseIdentifier: "DiTuDanYuanGe")
+        lieBiaoShiTu.register(SelPeta.self, forCellReuseIdentifier: "SelPeta")
         lieBiaoShiTu.snp.makeConstraints { make in
             make.top.equalTo(biaoTiLabel.snp.bottom).offset(20)
             make.left.right.equalToSuperview().inset(20)
@@ -76,17 +76,17 @@ class DiTuXuanZeShiTu: UIViewController {
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
-extension DiTuXuanZeShiTu: UITableViewDelegate, UITableViewDataSource {
+extension PaparanPemilihPeta: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return youXiGuanLi.suoYouDiTu.count
+        return pengurusPermainan.suoYouDiTu.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let danYuanGe = tableView.dequeueReusableCell(withIdentifier: "DiTuDanYuanGe", for: indexPath) as! DiTuDanYuanGe
-        let diTu = youXiGuanLi.suoYouDiTu[indexPath.row]
-        let shiJieSuo = indexPath.row < youXiGuanLi.wanJia.yiJieSuoDiTuShuLiang
-        danYuanGe.peiZhi(diTu: diTu, shiJieSuo: shiJieSuo)
-        return danYuanGe
+        let sel = tableView.dequeueReusableCell(withIdentifier: "SelPeta", for: indexPath) as! SelPeta
+        let peta = pengurusPermainan.suoYouDiTu[indexPath.row]
+        let adakahDibuka = indexPath.row < pengurusPermainan.pemain.jumlahPetaDibuka
+        sel.peiZhi(peta: peta, adakahDibuka: adakahDibuka)
+        return sel
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -96,21 +96,21 @@ extension DiTuXuanZeShiTu: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        let diTu = youXiGuanLi.suoYouDiTu[indexPath.row]
-        let shiJieSuo = indexPath.row < youXiGuanLi.wanJia.yiJieSuoDiTuShuLiang
+        let peta = pengurusPermainan.suoYouDiTu[indexPath.row]
+        let adakahDibuka = indexPath.row < pengurusPermainan.pemain.jumlahPetaDibuka
 
-        if shiJieSuo {
+        if adakahDibuka {
             // 进入游戏
-            let youXiChangJing = YouXiChangJingShiTu(diTu: diTu)
-            youXiChangJing.modalPresentationStyle = .fullScreen
-            present(youXiChangJing, animated: true)
+            let adegan = PaparanAdegan(peta: peta)
+            adegan.modalPresentationStyle = .fullScreen
+            present(adegan, animated: true)
         } else {
             // 显示未解锁提示
-            let tanKuang = ZiDingYiTanKuang()
-            tanKuang.xianShi(
+            let dialog = DialogTersuai()
+            dialog.tunjuk(
                 zaiShiTu: view,
-                biaoTi: "Locked",
-                xiaoXi: "Complete the previous map to unlock this one!",
+                tajuk: "Locked",
+                kandungan: "Complete the previous map to unlock this one!",
                 anNius: [("OK", UIColor(red: 0.2, green: 0.5, blue: 0.8, alpha: 1.0), {})]
             )
         }
@@ -118,7 +118,7 @@ extension DiTuXuanZeShiTu: UITableViewDelegate, UITableViewDataSource {
 }
 
 // MARK: - 地图单元格
-class DiTuDanYuanGe: UITableViewCell {
+class SelPeta: UITableViewCell {
     private let rongQiShiTu = UIView()
     private let mingChengLabel = UILabel()
     private let miaoShuLabel = UILabel()
@@ -208,14 +208,14 @@ class DiTuDanYuanGe: UITableViewCell {
         }
     }
 
-    func peiZhi(diTu: DituXinXi, shiJieSuo: Bool) {
-        mingChengLabel.text = diTu.mingCheng
-        miaoShuLabel.text = diTu.miaoshu
-        bossLabel.text = "Boss: \(diTu.bossMingCheng)"
-        xueLiangLabel.text = "HP: \(diTu.bossXueLiang) | ATK: \(diTu.bossGongJi)"
-        jiangLiLabel.text = "💰 \(diTu.jiangLiJinBi)"
+    func peiZhi(peta: MaklumatPeta, adakahDibuka: Bool) {
+        mingChengLabel.text = peta.nama
+        miaoShuLabel.text = peta.penerangan
+        bossLabel.text = "Boss: \(peta.namaBoss)"
+        xueLiangLabel.text = "HP: \(peta.nyawaBoss) | ATK: \(peta.seranganBoss)"
+        jiangLiLabel.text = "💰 \(peta.syilingGanjaran)"
 
-        if shiJieSuo {
+        if adakahDibuka {
             suoIcon.isHidden = true
             rongQiShiTu.alpha = 1.0
         } else {

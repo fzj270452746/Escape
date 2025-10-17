@@ -1,5 +1,5 @@
 //
-//  YouXiAnNiu.swift
+//  ButangPermainan.swift
 //  Escape
 //
 //  Created by Hades on 10/17/25.
@@ -8,38 +8,38 @@
 import UIKit
 
 // 游戏按钮
-class YouXiAnNiu: UIButton {
-    enum AnNiuYangShi {
-        case zhuyao    // 主要按钮（金色）
-        case ciYao     // 次要按钮（蓝色）
-        case weixian   // 危险按钮（红色）
-        case chenggong // 成功按钮（绿色）
+class ButangPermainan: UIButton {
+    enum GayaButang {
+        case utama    // 主要按钮（金色）
+        case kedua     // 次要按钮（蓝色）
+        case bahaya   // 危险按钮（红色）
+        case berjaya // 成功按钮（绿色）
     }
 
-    init(biaoTi: String, yangShi: AnNiuYangShi = .zhuyao) {
+    init(tajuk: String, gaya: GayaButang = .utama) {
         super.init(frame: .zero)
-        sheZhiJieMian(biaoTi: biaoTi, yangShi: yangShi)
+        sheZhiJieMian(tajuk: tajuk, gaya: gaya)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func sheZhiJieMian(biaoTi: String, yangShi: AnNiuYangShi) {
-        setTitle(biaoTi, for: .normal)
+    private func sheZhiJieMian(tajuk: String, gaya: GayaButang) {
+        setTitle(tajuk, for: .normal)
         titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         setTitleColor(.white, for: .normal)
         layer.cornerRadius = 12
 
         let yanse: UIColor
-        switch yangShi {
-        case .zhuyao:
+        switch gaya {
+        case .utama:
             yanse = UIColor(red: 0.8, green: 0.6, blue: 0.2, alpha: 1.0)
-        case .ciYao:
+        case .kedua:
             yanse = UIColor(red: 0.2, green: 0.5, blue: 0.8, alpha: 1.0)
-        case .weixian:
+        case .bahaya:
             yanse = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0)
-        case .chenggong:
+        case .berjaya:
             yanse = UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0)
         }
 

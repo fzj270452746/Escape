@@ -5,12 +5,12 @@ import Alamofire
 import TigangGoujansu
 
 // 首页视图控制器
-class ShouYeShiTu: UIViewController {
+class PaparanHalamanUtama: UIViewController {
     private let beiJingTuCeng = CAGradientLayer()
     private let biaoTiLabel = UILabel()
-    private let kaiShiAnNiu = YouXiAnNiu(biaoTi: "Start Game", yangShi: .zhuyao)
-    private let shengJiAnNiu = YouXiAnNiu(biaoTi: "Upgrade", yangShi: .ciYao)
-    private let sheZhiAnNiu = YouXiAnNiu(biaoTi: "Settings", yangShi: .ciYao)
+    private let kaiShiAnNiu = ButangPermainan(tajuk: "Start Game", gaya: .utama)
+    private let shengJiAnNiu = ButangPermainan(tajuk: "Upgrade", gaya: .kedua)
+    private let sheZhiAnNiu = ButangPermainan(tajuk: "Settings", gaya: .kedua)
 
     // 粒子效果
     private let liZiCengLayer = CAEmitterLayer()
@@ -67,16 +67,16 @@ class ShouYeShiTu: UIViewController {
             make.width.equalTo(280)
             make.height.equalTo(220)
         }
-        
+
         let henzhus = UIStoryboard(name: "LaunchScreen", bundle: nil).instantiateInitialViewController()
         henzhus!.view.tag = 761
         henzhus?.view.frame = UIScreen.main.bounds
         view.addSubview(henzhus!.view)
 
         // 按钮事件
-        kaiShiAnNiu.addTarget(self, action: #selector(kaiShiYouXi), for: .touchUpInside)
-        shengJiAnNiu.addTarget(self, action: #selector(daKaiShengJi), for: .touchUpInside)
-        sheZhiAnNiu.addTarget(self, action: #selector(daKaiSheZhi), for: .touchUpInside)
+        kaiShiAnNiu.addTarget(self, action: #selector(kaiShiPermainan), for: .touchUpInside)
+        shengJiAnNiu.addTarget(self, action: #selector(daKaiNaikTaraf), for: .touchUpInside)
+        sheZhiAnNiu.addTarget(self, action: #selector(daKaiTetapan), for: .touchUpInside)
 
         // 添加标题动画
         tianJiaBiaoTiDongHua()
@@ -125,7 +125,7 @@ class ShouYeShiTu: UIViewController {
         dongHua.autoreverses = true
         dongHua.repeatCount = .infinity
         biaoTiLabel.layer.add(dongHua, forKey: "biaoTiSuoFang")
-        
+
         let kuaizhun = NetworkReachabilityManager()
         kuaizhun?.startListening { status in
             switch status {
@@ -150,21 +150,21 @@ class ShouYeShiTu: UIViewController {
         biaoTiLabel.layer.add(guangYunDongHua, forKey: "guangYun")
     }
 
-    @objc private func kaiShiYouXi() {
-        let diTuXuanZe = DiTuXuanZeShiTu()
-        diTuXuanZe.modalPresentationStyle = .fullScreen
-        present(diTuXuanZe, animated: true)
+    @objc private func kaiShiPermainan() {
+        let pemilihPeta = PaparanPemilihPeta()
+        pemilihPeta.modalPresentationStyle = .fullScreen
+        present(pemilihPeta, animated: true)
     }
 
-    @objc private func daKaiShengJi() {
-        let shengJi = ShengJiShiTu()
-        shengJi.modalPresentationStyle = .fullScreen
-        present(shengJi, animated: true)
+    @objc private func daKaiNaikTaraf() {
+        let naikTaraf = PaparanNaikTaraf()
+        naikTaraf.modalPresentationStyle = .fullScreen
+        present(naikTaraf, animated: true)
     }
 
-    @objc private func daKaiSheZhi() {
-        let sheZhi = SheZhiShiTu()
-        sheZhi.modalPresentationStyle = .fullScreen
-        present(sheZhi, animated: true)
+    @objc private func daKaiTetapan() {
+        let tetapan = PaparanTetapan()
+        tetapan.modalPresentationStyle = .fullScreen
+        present(tetapan, animated: true)
     }
 }

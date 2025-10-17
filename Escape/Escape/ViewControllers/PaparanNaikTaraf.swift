@@ -1,5 +1,5 @@
 //
-//  ShengJiShiTu.swift
+//  PaparanNaikTaraf.swift
 //  Escape
 //
 //  Created by Hades on 10/17/25.
@@ -9,18 +9,18 @@ import UIKit
 import SnapKit
 
 // 升级视图控制器
-class ShengJiShiTu: UIViewController {
+class PaparanNaikTaraf: UIViewController {
     private let beiJingTuCeng = CAGradientLayer()
     private let biaoTiLabel = UILabel()
-    private let fanHuiAnNiu = YouXiAnNiu(biaoTi: "← Back", yangShi: .ciYao)
+    private let fanHuiAnNiu = ButangPermainan(tajuk: "← Back", gaya: .kedua)
     private let jinBiLabel = UILabel()
 
-    private let xueLiangKa = ShengJiKaPian()
-    private let gongJiKa = ShengJiKaPian()
-    private let fangYuKa = ShengJiKaPian()
-    private let huiFuKa = ShengJiKaPian()
+    private let xueLiangKa = KadNaikTaraf()
+    private let gongJiKa = KadNaikTaraf()
+    private let fangYuKa = KadNaikTaraf()
+    private let huiFuKa = KadNaikTaraf()
 
-    private let youXiGuanLi = YouXiGuanLiQi.gongXiang
+    private let pengurusPermainan = PengurusPermainan.gongXiang
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,10 +110,10 @@ class ShengJiShiTu: UIViewController {
             miaoShu: "+50 HP",
             jiGe: 100,
             dangQianZhi: { [weak self] in
-                return self?.youXiGuanLi.wanJia.zuiDaXueLiang ?? 0
+                return self?.pengurusPermainan.pemain.maksimumNyawa ?? 0
             },
             shengJiHuiDiao: { [weak self] in
-                self?.shengJiXueLiang()
+                self?.naikTarafNyawa()
             }
         )
 
@@ -123,10 +123,10 @@ class ShengJiShiTu: UIViewController {
             miaoShu: "+10 ATK",
             jiGe: 100,
             dangQianZhi: { [weak self] in
-                return self?.youXiGuanLi.wanJia.gongJiLi ?? 0
+                return self?.pengurusPermainan.pemain.kuasaSerangan ?? 0
             },
             shengJiHuiDiao: { [weak self] in
-                self?.shengJiGongJi()
+                self?.naikTarafSerangan()
             }
         )
 
@@ -136,10 +136,10 @@ class ShengJiShiTu: UIViewController {
             miaoShu: "+3 DEF",
             jiGe: 100,
             dangQianZhi: { [weak self] in
-                return self?.youXiGuanLi.wanJia.fangYuLi ?? 0
+                return self?.pengurusPermainan.pemain.kuasaPertahanan ?? 0
             },
             shengJiHuiDiao: { [weak self] in
-                self?.shengJiFangYu()
+                self?.naikTarafPertahanan()
             }
         )
 
@@ -149,16 +149,16 @@ class ShengJiShiTu: UIViewController {
             miaoShu: "+10 HEAL",
             jiGe: 100,
             dangQianZhi: { [weak self] in
-                return self?.youXiGuanLi.wanJia.huiFuLiang ?? 0
+                return self?.pengurusPermainan.pemain.jumlahPemulihan ?? 0
             },
             shengJiHuiDiao: { [weak self] in
-                self?.shengJiHuiFu()
+                self?.naikTarafPemulihan()
             }
         )
     }
 
     private func gengXinJieMian() {
-        jinBiLabel.text = "💰 Coins: \(youXiGuanLi.wanJia.jinBi)"
+        jinBiLabel.text = "💰 Coins: \(pengurusPermainan.pemain.syiling)"
         xueLiangKa.gengXin()
         gongJiKa.gengXin()
         fangYuKa.gengXin()
@@ -166,9 +166,9 @@ class ShengJiShiTu: UIViewController {
     }
 
     // 升级方法
-    private func shengJiXueLiang() {
-        if youXiGuanLi.wanJia.shengJiXueLiang(jiGe: 100) {
-            youXiGuanLi.baoCunWanJiaShuJu()
+    private func naikTarafNyawa() {
+        if pengurusPermainan.pemain.naikTarafNyawa(harga: 100) {
+            pengurusPermainan.simpanData()
             gengXinJieMian()
             xianShiChengGongTiShi(xiaoXi: "Max HP upgraded!")
         } else {
@@ -176,9 +176,9 @@ class ShengJiShiTu: UIViewController {
         }
     }
 
-    private func shengJiGongJi() {
-        if youXiGuanLi.wanJia.shengJiGongJiLi(jiGe: 100) {
-            youXiGuanLi.baoCunWanJiaShuJu()
+    private func naikTarafSerangan() {
+        if pengurusPermainan.pemain.naikTarafSerangan(harga: 100) {
+            pengurusPermainan.simpanData()
             gengXinJieMian()
             xianShiChengGongTiShi(xiaoXi: "Attack upgraded!")
         } else {
@@ -186,9 +186,9 @@ class ShengJiShiTu: UIViewController {
         }
     }
 
-    private func shengJiFangYu() {
-        if youXiGuanLi.wanJia.shengJiFangYuLi(jiGe: 100) {
-            youXiGuanLi.baoCunWanJiaShuJu()
+    private func naikTarafPertahanan() {
+        if pengurusPermainan.pemain.naikTarafPertahanan(harga: 100) {
+            pengurusPermainan.simpanData()
             gengXinJieMian()
             xianShiChengGongTiShi(xiaoXi: "Defense upgraded!")
         } else {
@@ -196,9 +196,9 @@ class ShengJiShiTu: UIViewController {
         }
     }
 
-    private func shengJiHuiFu() {
-        if youXiGuanLi.wanJia.shengJiHuiFuLiang(jiGe: 100) {
-            youXiGuanLi.baoCunWanJiaShuJu()
+    private func naikTarafPemulihan() {
+        if pengurusPermainan.pemain.naikTarafPemulihan(harga: 100) {
+            pengurusPermainan.simpanData()
             gengXinJieMian()
             xianShiChengGongTiShi(xiaoXi: "Recovery upgraded!")
         } else {
@@ -207,21 +207,21 @@ class ShengJiShiTu: UIViewController {
     }
 
     private func xianShiChengGongTiShi(xiaoXi: String) {
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "Success!",
-            xiaoXi: xiaoXi,
+            tajuk: "Success!",
+            kandungan: xiaoXi,
             anNius: [("OK", UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0), {})]
         )
     }
 
     private func xianShiShiBaiTiShi() {
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "Insufficient Coins",
-            xiaoXi: "You need more coins to upgrade!",
+            tajuk: "Insufficient Coins",
+            kandungan: "You need more coins to upgrade!",
             anNius: [("OK", UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0), {})]
         )
     }
@@ -232,12 +232,12 @@ class ShengJiShiTu: UIViewController {
 }
 
 // MARK: - 升级卡片
-class ShengJiKaPian: UIView {
+class KadNaikTaraf: UIView {
     private let biaoTiLabel = UILabel()
     private let tubiaoLabel = UILabel()
     private let dangQianZhiLabel = UILabel()
     private let miaoShuLabel = UILabel()
-    private let shengJiAnNiu = YouXiAnNiu(biaoTi: "Upgrade", yangShi: .chenggong)
+    private let shengJiAnNiu = ButangPermainan(tajuk: "Upgrade", gaya: .berjaya)
     private let jiGeLabel = UILabel()
 
     private var jiGe: Int = 0

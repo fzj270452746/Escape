@@ -1,5 +1,5 @@
 //
-//  MajiangPaiShiTu.swift
+//  PaparanKepingMahjong.swift
 //  Escape
 //
 //  Created by Hades on 10/17/25.
@@ -9,13 +9,13 @@ import UIKit
 import SnapKit
 
 // 麻将牌视图
-class MajiangPaiShiTu: UIView {
-    let pai: MajiangPai
+class PaparanKepingMahjong: UIView {
+    let keping: KepingMahjong
     private let tupianShiTu = UIImageView()
     private var shiXuanZhong = false
 
-    init(pai: MajiangPai) {
-        self.pai = pai
+    init(keping: KepingMahjong) {
+        self.keping = keping
         super.init(frame: .zero)
         sheZhiJieMian()
     }
@@ -35,7 +35,7 @@ class MajiangPaiShiTu: UIView {
         layer.shadowRadius = 4
 
         addSubview(tupianShiTu)
-        tupianShiTu.image = UIImage(named: pai.tuPianMingCheng)
+        tupianShiTu.image = UIImage(named: keping.namaGambar)
         tupianShiTu.contentMode = .scaleAspectFit
         tupianShiTu.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(4)
@@ -43,7 +43,7 @@ class MajiangPaiShiTu: UIView {
     }
 
     // 设置选中状态
-    func sheZhiXuanZhong(_ xuanZhong: Bool, dongHua: Bool = true) {
+    func tetapkanPemilihan(_ xuanZhong: Bool, dongHua: Bool = true) {
         shiXuanZhong = xuanZhong
 
         let bianHua = {
@@ -73,7 +73,7 @@ class MajiangPaiShiTu: UIView {
         }
     }
 
-    var huoQuXuanZhongZhuangTai: Bool {
+    var dapatkanStatusPemilihan: Bool {
         return shiXuanZhong
     }
 }

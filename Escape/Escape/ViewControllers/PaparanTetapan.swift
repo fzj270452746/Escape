@@ -1,5 +1,5 @@
 //
-//  SheZhiShiTu.swift
+//  PaparanTetapan.swift
 //  Escape
 //
 //  Created by Hades on 10/17/25.
@@ -9,10 +9,10 @@ import UIKit
 import SnapKit
 
 // 设置视图控制器
-class SheZhiShiTu: UIViewController {
+class PaparanTetapan: UIViewController {
     private let beiJingTuCeng = CAGradientLayer()
     private let biaoTiLabel = UILabel()
-    private let fanHuiAnNiu = YouXiAnNiu(biaoTi: "← Back", yangShi: .ciYao)
+    private let fanHuiAnNiu = ButangPermainan(tajuk: "← Back", gaya: .kedua)
     private let gunDongShiTu = UIScrollView()
     private let neiRongShiTu = UIView()
 
@@ -184,7 +184,7 @@ class SheZhiShiTu: UIViewController {
             make.height.equalTo(100)
         }
 
-        let tiJiaoAnNiu = YouXiAnNiu(biaoTi: "Submit", yangShi: .chenggong)
+        let tiJiaoAnNiu = ButangPermainan(tajuk: "Submit", gaya: .berjaya)
         fanKuiKuang.addSubview(tiJiaoAnNiu)
         tiJiaoAnNiu.snp.makeConstraints { make in
             make.top.equalTo(shuRuKuang.snp.bottom).offset(10)
@@ -234,7 +234,7 @@ class SheZhiShiTu: UIViewController {
         }
 
         // 重置按钮
-        let chongZhiAnNiu = YouXiAnNiu(biaoTi: "Reset Game Data", yangShi: .weixian)
+        let chongZhiAnNiu = ButangPermainan(tajuk: "Reset Game Data", gaya: .bahaya)
         neiRongShiTu.addSubview(chongZhiAnNiu)
         chongZhiAnNiu.snp.makeConstraints { make in
             make.top.equalTo(pingFenKuang.snp.bottom).offset(30)
@@ -273,11 +273,11 @@ class SheZhiShiTu: UIViewController {
 
     private func tiJiaoFanKui(neiRong: String) {
         // 这里可以实现真实的反馈提交逻辑
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "Thank You!",
-            xiaoXi: "Your feedback has been saved locally.",
+            tajuk: "Thank You!",
+            kandungan: "Your feedback has been saved locally.",
             anNius: [("OK", UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0), {})]
         )
 
@@ -286,11 +286,11 @@ class SheZhiShiTu: UIViewController {
     }
 
     private func pingFen(fenShu: Int) {
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "Thank You!",
-            xiaoXi: "You rated us \(fenShu) star\(fenShu > 1 ? "s" : "")!",
+            tajuk: "Thank You!",
+            kandungan: "You rated us \(fenShu) star\(fenShu > 1 ? "s" : "")!",
             anNius: [("OK", UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0), {})]
         )
 
@@ -298,15 +298,15 @@ class SheZhiShiTu: UIViewController {
     }
 
     @objc private func chongZhiYouXi() {
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "Warning!",
-            xiaoXi: "This will reset all your progress. Are you sure?",
+            tajuk: "Warning!",
+            kandungan: "This will reset all your progress. Are you sure?",
             anNius: [
                 ("Cancel", UIColor(red: 0.2, green: 0.5, blue: 0.8, alpha: 1.0), {}),
                 ("Reset", UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0), { [weak self] in
-                    YouXiGuanLiQi.gongXiang.chongZhiYouXiShuJu()
+                    PengurusPermainan.gongXiang.setelSemulakanPermainan()
                     self?.xianShiChongZhiChengGong()
                 })
             ]
@@ -314,11 +314,11 @@ class SheZhiShiTu: UIViewController {
     }
 
     private func xianShiChongZhiChengGong() {
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "Reset Complete",
-            xiaoXi: "Your game data has been reset.",
+            tajuk: "Reset Complete",
+            kandungan: "Your game data has been reset.",
             anNius: [("OK", UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0), {})]
         )
     }

@@ -1,5 +1,5 @@
 //
-//  ZiDingYiTanKuang.swift
+//  DialogTersuai.swift
 //  Escape
 //
 //  Created by Hades on 10/17/25.
@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 // 自定义弹框
-class ZiDingYiTanKuang: UIView {
+class DialogTersuai: UIView {
     private let neiRongShiTu = UIView()
     private let biaoTiLabel = UILabel()
     private let xiaoXiLabel = UILabel()
@@ -73,16 +73,16 @@ class ZiDingYiTanKuang: UIView {
     }
 
     // 显示弹框
-    func xianShi(zaiShiTu shiTu: UIView, biaoTi: String, xiaoXi: String, anNius: [(String, UIColor, () -> Void)]) {
-        biaoTiLabel.text = biaoTi
-        xiaoXiLabel.text = xiaoXi
+    func tunjuk(zaiShiTu shiTu: UIView, tajuk: String, kandungan: String, anNius: [(String, UIColor, () -> Void)]) {
+        biaoTiLabel.text = tajuk
+        xiaoXiLabel.text = kandungan
 
         // 清空旧按钮
         anNiuRongQi.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
         // 添加新按钮
-        for (wenZi, yanse, dongZuo) in anNius {
-            let anNiu = chuangJianAnNiu(wenZi: wenZi, yanse: yanse, dongZuo: dongZuo)
+        for (teks, yanse, dongZuo) in anNius {
+            let anNiu = chuangJianAnNiu(teks: teks, yanse: yanse, dongZuo: dongZuo)
             anNiuRongQi.addArrangedSubview(anNiu)
         }
 
@@ -101,7 +101,7 @@ class ZiDingYiTanKuang: UIView {
     }
 
     // 关闭弹框
-    func guanBi(wanCheng: (() -> Void)? = nil) {
+    func sembunyi(wanCheng: (() -> Void)? = nil) {
         UIView.animate(withDuration: 0.2, animations: {
             self.alpha = 0
             self.neiRongShiTu.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
@@ -111,9 +111,9 @@ class ZiDingYiTanKuang: UIView {
         }
     }
 
-    private func chuangJianAnNiu(wenZi: String, yanse: UIColor, dongZuo: @escaping () -> Void) -> UIButton {
+    private func chuangJianAnNiu(teks: String, yanse: UIColor, dongZuo: @escaping () -> Void) -> UIButton {
         let anNiu = UIButton(type: .system)
-        anNiu.setTitle(wenZi, for: .normal)
+        anNiu.setTitle(teks, for: .normal)
         anNiu.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         anNiu.setTitleColor(.white, for: .normal)
         anNiu.backgroundColor = yanse
@@ -125,7 +125,7 @@ class ZiDingYiTanKuang: UIView {
 
         anNiu.addAction(UIAction { [weak self] _ in
             dongZuo()
-            self?.guanBi()
+            self?.sembunyi()
         }, for: .touchUpInside)
 
         return anNiu

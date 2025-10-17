@@ -1,5 +1,5 @@
 //
-//  YouXiChangJingShiTu.swift
+//  PaparanAdegan.swift
 //  Escape
 //
 //  Created by Hades on 10/17/25.
@@ -9,14 +9,14 @@ import UIKit
 import SnapKit
 
 // 游戏场景视图控制器
-class YouXiChangJingShiTu: UIViewController {
+class PaparanAdegan: UIViewController {
     private let beiJingTuCeng = CAGradientLayer()
-    private let diTu: DituXinXi
-    private let youXiGuanLi = YouXiGuanLiQi.gongXiang
+    private let peta: MaklumatPeta
+    private let pengurusPermainan = PengurusPermainan.gongXiang
 
     // UI元素
-    private let wanJiaXueLiangTiao = JinDuTiaoShiTu()
-    private let diRenXueLiangTiao = JinDuTiaoShiTu()
+    private let wanJiaXueLiangTiao = PaparanBarKemajuan()
+    private let diRenXueLiangTiao = PaparanBarKemajuan()
     private let wanJiaXinXiLabel = UILabel()
     private let diRenXinXiLabel = UILabel()
     private let diRenTuXiang = UILabel()
@@ -24,23 +24,23 @@ class YouXiChangJingShiTu: UIViewController {
     private let huiHeTiShiLabel = UILabel()  // 回合提示标签
 
     private let shouPaiRongQi = UIView()
-    private var shouPaiShiTuShuZu: [MajiangPaiShiTu] = []
-    private var dangQianShouPai: [MajiangPai] = []
+    private var shouPaiShiTuShuZu: [PaparanKepingMahjong] = []
+    private var dangQianShouPai: [KepingMahjong] = []
 
-    private let daChupaiAnNiu = YouXiAnNiu(biaoTi: "Attack", yangShi: .zhuyao)
-    private let tiaoGuoAnNiu = YouXiAnNiu(biaoTi: "Skip Turn", yangShi: .ciYao)
-    private let tuiChuAnNiu = YouXiAnNiu(biaoTi: "Exit", yangShi: .weixian)
+    private let daChupaiAnNiu = ButangPermainan(tajuk: "Attack", gaya: .utama)
+    private let tiaoGuoAnNiu = ButangPermainan(tajuk: "Skip Turn", gaya: .kedua)
+    private let tuiChuAnNiu = ButangPermainan(tajuk: "Exit", gaya: .bahaya)
 
     private let xiaoGuoLabel = UILabel()
 
     // 游戏状态
-    private var diRenLieBiao: [DiRenXinXi] = []
-    private var dangQianDiRen: DiRenXinXi?
+    private var diRenLieBiao: [MaklumatMusuh] = []
+    private var dangQianDiRen: MaklumatMusuh?
     private var huiHeShu = 0
     private var shiWanJiaHuiHe = true
 
-    init(diTu: DituXinXi) {
-        self.diTu = diTu
+    init(peta: MaklumatPeta) {
+        self.peta = peta
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -206,7 +206,7 @@ class YouXiChangJingShiTu: UIViewController {
     // 初始化游戏
     private func chuShiHuaYouXi() {
         // 重置玩家血量
-        youXiGuanLi.wanJia.chongZhiXueLiang()
+        pengurusPermainan.pemain.setelSemulakanNyawa()
 
         // 创建敌人列表
         chuangJianDiRenLieBiao()
@@ -219,22 +219,22 @@ class YouXiChangJingShiTu: UIViewController {
         diRenLieBiao.removeAll()
 
         // 创建小怪
-        for i in 1...diTu.xiaoGuaiShuLiang {
-            let xiaoGuai = DiRenXinXi(
-                mingCheng: "Minion \(i)",
+        for i in 1...peta.jumlahMinion {
+            let xiaoGuai = MaklumatMusuh(
+                nama: "Minion \(i)",
                 leiXing: .xiaoGuai,
-                xueLiang: diTu.xiaoGuaiXueLiang,
-                gongJiLi: diTu.xiaoGuaiGongJi
+                xueLiang: peta.nyawaMinion,
+                kuasaSerangan: peta.seranganMinion
             )
             diRenLieBiao.append(xiaoGuai)
         }
 
         // 创建Boss
-        let boss = DiRenXinXi(
-            mingCheng: diTu.bossMingCheng,
+        let boss = MaklumatMusuh(
+            nama: peta.namaBoss,
             leiXing: .boss,
-            xueLiang: diTu.bossXueLiang,
-            gongJiLi: diTu.bossGongJi
+            xueLiang: peta.nyawaBoss,
+            kuasaSerangan: peta.seranganBoss
         )
         diRenLieBiao.append(boss)
 
@@ -259,7 +259,7 @@ class YouXiChangJingShiTu: UIViewController {
         shouPaiShiTuShuZu.removeAll()
 
         // 抽取6张牌并排序
-        dangQianShouPai = youXiGuanLi.paiZuGuanLiQi.suiJiChouPai(shuLiang: 6).sorted()
+        dangQianShouPai = pengurusPermainan.pengurusGeladak.cabutRawak(jumlah: 6).sorted()
 
         // 使用SnapKit布局手牌
         let paiKuanDu: CGFloat = 55
@@ -269,7 +269,7 @@ class YouXiChangJingShiTu: UIViewController {
         let jianGe = (zongKuanDu - CGFloat(paiShuLiang) * paiKuanDu) / CGFloat(paiShuLiang + 1)
 
         for (suoYin, pai) in dangQianShouPai.enumerated() {
-            let paiShiTu = MajiangPaiShiTu(pai: pai)
+            let paiShiTu = PaparanKepingMahjong(keping: pai)
             shouPaiRongQi.addSubview(paiShiTu)
 
             paiShiTu.snp.makeConstraints { make in
@@ -304,19 +304,19 @@ class YouXiChangJingShiTu: UIViewController {
         gengXinHuiHeTiShi()
 
         // 更新玩家信息
-        let wanJia = youXiGuanLi.wanJia
-        wanJiaXinXiLabel.text = "Player\nATK: \(wanJia.gongJiLi) | DEF: \(wanJia.fangYuLi) | HEAL: \(wanJia.huiFuLiang)"
-        wanJiaXueLiangTiao.gengXinJinDu(CGFloat(wanJia.dangQianXueLiang) / CGFloat(wanJia.zuiDaXueLiang), dongHua: true)
-        wanJiaXueLiangTiao.sheZhiWenZi("\(wanJia.dangQianXueLiang) / \(wanJia.zuiDaXueLiang)")
+        let pemain = pengurusPermainan.pemain
+        wanJiaXinXiLabel.text = "Player\nATK: \(pemain.kuasaSerangan) | DEF: \(pemain.kuasaPertahanan) | HEAL: \(pemain.jumlahPemulihan)"
+        wanJiaXueLiangTiao.kemaskini(CGFloat(pemain.nyawaSemasa) / CGFloat(pemain.maksimumNyawa), dongHua: true)
+        wanJiaXueLiangTiao.tetapkanTeks("\(pemain.nyawaSemasa) / \(pemain.maksimumNyawa)")
 
         // 更新敌人信息
-        if let diRen = dangQianDiRen {
-            diRenXinXiLabel.text = "\(diRen.mingCheng) | ATK: \(diRen.gongJiLi)"
-            diRenXueLiangTiao.gengXinJinDu(diRen.xueLiangBaiFenBi, dongHua: true)
-            diRenXueLiangTiao.sheZhiWenZi("\(diRen.dangQianXueLiang) / \(diRen.zuiDaXueLiang)")
+        if let musuh = dangQianDiRen {
+            diRenXinXiLabel.text = "\(musuh.nama) | ATK: \(musuh.kuasaSerangan)"
+            diRenXueLiangTiao.kemaskini(musuh.xueLiangBaiFenBi, dongHua: true)
+            diRenXueLiangTiao.tetapkanTeks("\(musuh.nyawaSemasa) / \(musuh.maksimumNyawa)")
 
             // 根据敌人类型更换图标
-            diRenTuXiang.text = diRen.leiXing == .boss ? "👺" : "👹"
+            diRenTuXiang.text = musuh.leiXing == .boss ? "👺" : "👹"
         }
     }
 
@@ -348,16 +348,16 @@ class YouXiChangJingShiTu: UIViewController {
 
     // 点击牌
     @objc private func dianJiPai(_ gesture: UITapGestureRecognizer) {
-        guard let paiShiTu = gesture.view as? MajiangPaiShiTu else { return }
-        let xuanZhong = !paiShiTu.huoQuXuanZhongZhuangTai
-        paiShiTu.sheZhiXuanZhong(xuanZhong)
+        guard let paiShiTu = gesture.view as? PaparanKepingMahjong else { return }
+        let xuanZhong = !paiShiTu.dapatkanStatusPemilihan
+        paiShiTu.tetapkanPemilihan(xuanZhong)
     }
 
     // 打出牌
     @objc private func daChuPai() {
         // 获取选中的牌和牌视图
-        let xuanZhongPaiShiTu = shouPaiShiTuShuZu.filter { $0.huoQuXuanZhongZhuangTai }
-        let xuanZhongPai = xuanZhongPaiShiTu.map { $0.pai }
+        let xuanZhongPaiShiTu = shouPaiShiTuShuZu.filter { $0.dapatkanStatusPemilihan }
+        let xuanZhongPai = xuanZhongPaiShiTu.map { $0.keping }
 
         guard !xuanZhongPai.isEmpty else {
             xianShiTiShi(xiaoXi: "Please select cards!")
@@ -365,7 +365,7 @@ class YouXiChangJingShiTu: UIViewController {
         }
 
         // 检测组合
-        let zuHeLieBiao = youXiGuanLi.paiZuGuanLiQi.jianCeKeYongZuHe(shouPai: xuanZhongPai)
+        let zuHeLieBiao = pengurusPermainan.pengurusGeladak.kesanKombinasi(shouPai: xuanZhongPai)
 
         guard !zuHeLieBiao.isEmpty else {
             xianShiTiShi(xiaoXi: "Invalid combination!")
@@ -377,7 +377,7 @@ class YouXiChangJingShiTu: UIViewController {
 
         // 使用第一个组合
         let zuHe = zuHeLieBiao[0]
-        let (shangHai, huiFu) = youXiGuanLi.paiZuGuanLiQi.jiSuanXiaoGuo(zuHe: zuHe, wanJia: youXiGuanLi.wanJia)
+        let (shangHai, huiFu) = pengurusPermainan.pengurusGeladak.jiSuanXiaoGuo(zuHe: zuHe, wanJia: pengurusPermainan.pemain)
 
         // 移除打出的牌（带动画）
         yiChuDaChuDePai(paiShiTu: xuanZhongPaiShiTu)
@@ -387,11 +387,11 @@ class YouXiChangJingShiTu: UIViewController {
 
         if shangHai > 0 {
             // 对敌人造成伤害
-            dangQianDiRen?.shouDaoShangHai(shangHai)
+            dangQianDiRen?.terimaKerosakan(shangHai)
             xianShiShangHaiXiaoGuo(shangHai: shangHai)
         } else if huiFu > 0 {
             // 回复玩家血量
-            youXiGuanLi.wanJia.huiFuXueLiang(huiFu)
+            pengurusPermainan.pemain.pulihkanNyawa(huiFu)
             xianShiHuiFuXiaoGuo(huiFu: huiFu)
         }
 
@@ -417,7 +417,7 @@ class YouXiChangJingShiTu: UIViewController {
     }
 
     // 移除打出的牌
-    private func yiChuDaChuDePai(paiShiTu: [MajiangPaiShiTu]) {
+    private func yiChuDaChuDePai(paiShiTu: [PaparanKepingMahjong]) {
         for pai in paiShiTu {
             // 淡出动画
             UIView.animate(withDuration: 0.3, animations: {
@@ -428,7 +428,7 @@ class YouXiChangJingShiTu: UIViewController {
             }
 
             // 从数组中移除
-            if let index = shouPaiShiTuShuZu.firstIndex(where: { $0.pai.id == pai.pai.id }) {
+            if let index = shouPaiShiTuShuZu.firstIndex(where: { $0.keping.id == pai.keping.id }) {
                 shouPaiShiTuShuZu.remove(at: index)
             }
         }
@@ -454,12 +454,12 @@ class YouXiChangJingShiTu: UIViewController {
 
     // 敌人攻击
     private func diRenGongJi() {
-        guard let diRen = dangQianDiRen else { return }
+        guard let musuh = dangQianDiRen else { return }
 
         shiWanJiaHuiHe = false
-        youXiGuanLi.wanJia.shouDaoShangHai(diRen.gongJiLi)
+        pengurusPermainan.pemain.terimaKerosakan(musuh.kuasaSerangan)
 
-        xianShiDiRenGongJiXiaoGuo(shangHai: diRen.gongJiLi)
+        xianShiDiRenGongJiXiaoGuo(shangHai: musuh.kuasaSerangan)
         gengXinJieMian()
 
         // 检查玩家是否死亡
@@ -470,9 +470,9 @@ class YouXiChangJingShiTu: UIViewController {
 
     // 检查敌人状态
     private func jianChaDiRenZhuangTai() {
-        guard let diRen = dangQianDiRen else { return }
+        guard let musuh = dangQianDiRen else { return }
 
-        if !diRen.shiCunHuo {
+        if !musuh.adakahHidup {
             // 敌人死亡
             diRenLieBiao.removeFirst()
 
@@ -497,7 +497,7 @@ class YouXiChangJingShiTu: UIViewController {
 
     // 检查玩家状态
     private func jianChaWanJiaZhuangTai() {
-        if !youXiGuanLi.wanJia.shiCunHuo {
+        if !pengurusPermainan.pemain.adakahHidup {
             youXiShiBai()
         } else {
             kaiShiXinHuiHe()
@@ -506,11 +506,11 @@ class YouXiChangJingShiTu: UIViewController {
 
     // 显示Boss出现
     private func xianShiBossChuXian() {
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "⚠️ BOSS APPEARS!",
-            xiaoXi: "\(diTu.bossMingCheng) has entered the battle!",
+            tajuk: "⚠️ BOSS APPEARS!",
+            kandungan: "\(peta.namaBoss) has entered the battle!",
             anNius: [("Fight!", UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0), { [weak self] in
                 self?.kaiShiXinHuiHe()
             })]
@@ -520,21 +520,21 @@ class YouXiChangJingShiTu: UIViewController {
     // 游戏胜利
     private func youXiShengLi() {
         // 奖励金币
-        youXiGuanLi.wanJia.jinBi += diTu.jiangLiJinBi
+        pengurusPermainan.pemain.syiling += peta.syilingGanjaran
 
         // 解锁下一个地图
-        let dangQianDiTuSuoYin = diTu.id - 1
-        if dangQianDiTuSuoYin + 1 == youXiGuanLi.wanJia.yiJieSuoDiTuShuLiang {
-            youXiGuanLi.jieSuoXiaYiGeDiTu()
+        let dangQianDiTuSuoYin = peta.id - 1
+        if dangQianDiTuSuoYin + 1 == pengurusPermainan.pemain.jumlahPetaDibuka {
+            pengurusPermainan.bukaPeta()
         }
 
-        youXiGuanLi.baoCunWanJiaShuJu()
+        pengurusPermainan.simpanData()
 
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "🎉 VICTORY!",
-            xiaoXi: "You defeated all enemies!\nReward: 💰 \(diTu.jiangLiJinBi)",
+            tajuk: "🎉 VICTORY!",
+            kandungan: "You defeated all enemies!\nReward: 💰 \(peta.syilingGanjaran)",
             anNius: [("Continue", UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0), { [weak self] in
                 self?.dismiss(animated: true)
             })]
@@ -543,11 +543,11 @@ class YouXiChangJingShiTu: UIViewController {
 
     // 游戏失败
     private func youXiShiBai() {
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "💀 DEFEAT",
-            xiaoXi: "You have been defeated...\nTry upgrading your stats!",
+            tajuk: "💀 DEFEAT",
+            kandungan: "You have been defeated...\nTry upgrading your stats!",
             anNius: [("Retry", UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0), { [weak self] in
                 self?.chuShiHuaYouXi()
             }), ("Exit", UIColor(red: 0.2, green: 0.5, blue: 0.8, alpha: 1.0), { [weak self] in
@@ -558,11 +558,11 @@ class YouXiChangJingShiTu: UIViewController {
 
     // 显示提示
     private func xianShiTiShi(xiaoXi: String) {
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "Notice",
-            xiaoXi: xiaoXi,
+            tajuk: "Notice",
+            kandungan: xiaoXi,
             anNius: [("OK", UIColor(red: 0.2, green: 0.5, blue: 0.8, alpha: 1.0), {})]
         )
     }
@@ -589,7 +589,7 @@ class YouXiChangJingShiTu: UIViewController {
 
     // 显示敌人攻击效果
     private func xianShiDiRenGongJiXiaoGuo(shangHai: Int) {
-        let shiJiShangHai = max(0, shangHai - youXiGuanLi.wanJia.fangYuLi)
+        let shiJiShangHai = max(0, shangHai - pengurusPermainan.pemain.kuasaPertahanan)
         xiaoGuoLabel.text = "Enemy Attack\n-\(shiJiShangHai) 💢"
         xiaoGuoLabel.textColor = UIColor(red: 1.0, green: 0.5, blue: 0.0, alpha: 1.0)
         xiaoGuoLabel.numberOfLines = 2
@@ -613,11 +613,11 @@ class YouXiChangJingShiTu: UIViewController {
     }
 
     @objc private func tuiChuYouXi() {
-        let tanKuang = ZiDingYiTanKuang()
-        tanKuang.xianShi(
+        let dialog = DialogTersuai()
+        dialog.tunjuk(
             zaiShiTu: view,
-            biaoTi: "Exit Game?",
-            xiaoXi: "Your progress will be lost.",
+            tajuk: "Exit Game?",
+            kandungan: "Your progress will be lost.",
             anNius: [
                 ("Cancel", UIColor(red: 0.2, green: 0.5, blue: 0.8, alpha: 1.0), {}),
                 ("Exit", UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0), { [weak self] in

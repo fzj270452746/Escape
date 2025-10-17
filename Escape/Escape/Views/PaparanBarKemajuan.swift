@@ -1,5 +1,5 @@
 //
-//  JinDuTiaoShiTu.swift
+//  PaparanBarKemajuan.swift
 //  Escape
 //
 //  Created by Hades on 10/17/25.
@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 // 进度条视图（用于显示血量）
-class JinDuTiaoShiTu: UIView {
+class PaparanBarKemajuan: UIView {
     private let beiJingShiTu = UIView()
     private let jinDuShiTu = UIView()
     private let wenZiLabel = UILabel()
@@ -60,7 +60,7 @@ class JinDuTiaoShiTu: UIView {
     }
 
     // 更新进度
-    func gengXinJinDu(_ jinDu: CGFloat, dongHua: Bool = true) {
+    func kemaskini(_ jinDu: CGFloat, dongHua: Bool = true) {
         dangQianJinDu = max(0, min(1.0, jinDu))
 
         jinDuShiTu.snp.remakeConstraints { make in
@@ -89,7 +89,7 @@ class JinDuTiaoShiTu: UIView {
     }
 
     // 设置文字
-    func sheZhiWenZi(_ wenZi: String) {
-        wenZiLabel.text = wenZi
+    func tetapkanTeks(_ teks: String) {
+        wenZiLabel.text = teks
     }
 }
