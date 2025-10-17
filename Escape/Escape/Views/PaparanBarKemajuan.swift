@@ -38,7 +38,7 @@ class PaparanBarKemajuan: UIView {
 
         // 进度
         beiJingShiTu.addSubview(jinDuShiTu)
-        jinDuShiTu.backgroundColor = UIColor(red: 0.2, green: 0.8, blue: 0.2, alpha: 1.0)
+        jinDuShiTu.backgroundColor = AppColors.healthGreen
         jinDuShiTu.layer.cornerRadius = 8
         jinDuShiTu.snp.makeConstraints { make in
             make.left.top.bottom.equalToSuperview().inset(2)
@@ -49,7 +49,7 @@ class PaparanBarKemajuan: UIView {
         addSubview(wenZiLabel)
         wenZiLabel.textAlignment = .center
         wenZiLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        wenZiLabel.textColor = .white
+        wenZiLabel.textColor = AppColors.white
         wenZiLabel.layer.shadowColor = UIColor.black.cgColor
         wenZiLabel.layer.shadowOffset = CGSize(width: 0, height: 1)
         wenZiLabel.layer.shadowOpacity = 1.0
@@ -71,11 +71,11 @@ class PaparanBarKemajuan: UIView {
         // 根据血量改变颜色
         let yanse: UIColor
         if dangQianJinDu > 0.6 {
-            yanse = UIColor(red: 0.2, green: 0.8, blue: 0.2, alpha: 1.0)
+            yanse = AppColors.healthGreen
         } else if dangQianJinDu > 0.3 {
-            yanse = UIColor(red: 1.0, green: 0.8, blue: 0.0, alpha: 1.0)
+            yanse = AppColors.healthYellow
         } else {
-            yanse = UIColor(red: 1.0, green: 0.2, blue: 0.2, alpha: 1.0)
+            yanse = AppColors.healthRed
         }
         jinDuShiTu.backgroundColor = yanse
 

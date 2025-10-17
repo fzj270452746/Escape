@@ -9,52 +9,18 @@ import UIKit
 import SnapKit
 
 // 地图选择视图控制器
-class PaparanPemilihPeta: UIViewController {
-    private let beiJingTuCeng = CAGradientLayer()
-    private let biaoTiLabel = UILabel()
-    private let fanHuiAnNiu = ButangPermainan(tajuk: "← Back", gaya: .kedua)
+class PaparanPemilihPeta: BaseViewController {
     private let lieBiaoShiTu = UITableView()
-
     private let pengurusPermainan = PengurusPermainan.gongXiang
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTitle("SELECT MAP")
+        setupBackButton()
         sheZhiJieMian()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        beiJingTuCeng.frame = view.bounds
-    }
-
     private func sheZhiJieMian() {
-        // 渐变背景
-        beiJingTuCeng.colors = [
-            UIColor(red: 0.1, green: 0.1, blue: 0.2, alpha: 1.0).cgColor,
-            UIColor(red: 0.15, green: 0.1, blue: 0.25, alpha: 1.0).cgColor
-        ]
-        view.layer.insertSublayer(beiJingTuCeng, at: 0)
-
-        // 标题
-        view.addSubview(biaoTiLabel)
-        biaoTiLabel.text = "SELECT MAP"
-        biaoTiLabel.textAlignment = .center
-        biaoTiLabel.font = UIFont.boldSystemFont(ofSize: 28)
-        biaoTiLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
-        biaoTiLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.left.right.equalToSuperview().inset(20)
-        }
-
-        // 返回按钮
-        view.addSubview(fanHuiAnNiu)
-        fanHuiAnNiu.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.left.equalToSuperview().offset(20)
-            make.width.equalTo(100)
-            make.height.equalTo(44)
-        }
-        fanHuiAnNiu.addTarget(self, action: #selector(fanHui), for: .touchUpInside)
 
         // 列表
         view.addSubview(lieBiaoShiTu)
@@ -64,14 +30,10 @@ class PaparanPemilihPeta: UIViewController {
         lieBiaoShiTu.separatorStyle = .none
         lieBiaoShiTu.register(SelPeta.self, forCellReuseIdentifier: "SelPeta")
         lieBiaoShiTu.snp.makeConstraints { make in
-            make.top.equalTo(biaoTiLabel.snp.bottom).offset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.left.right.equalToSuperview().inset(20)
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
         }
-    }
-
-    @objc private func fanHui() {
-        dismiss(animated: true)
     }
 }
 
@@ -106,13 +68,7 @@ extension PaparanPemilihPeta: UITableViewDelegate, UITableViewDataSource {
             present(adegan, animated: true)
         } else {
             // 显示未解锁提示
-            let dialog = DialogTersuai()
-            dialog.tunjuk(
-                zaiShiTu: view,
-                tajuk: "Locked",
-                kandungan: "Complete the previous map to unlock this one!",
-                anNius: [("OK", UIColor(red: 0.2, green: 0.5, blue: 0.8, alpha: 1.0), {})]
-            )
+            showInfoDialog(title: "Locked", message: "Complete the previous map to unlock this one!")
         }
     }
 }
@@ -142,10 +98,10 @@ class SelPeta: UITableViewCell {
 
         // 容器
         contentView.addSubview(rongQiShiTu)
-        rongQiShiTu.backgroundColor = UIColor(red: 0.15, green: 0.15, blue: 0.2, alpha: 0.9)
+        rongQiShiTu.backgroundColor = AppColors.cardBackground
         rongQiShiTu.layer.cornerRadius = 15
         rongQiShiTu.layer.borderWidth = 2
-        rongQiShiTu.layer.borderColor = UIColor(red: 0.8, green: 0.6, blue: 0.2, alpha: 1.0).cgColor
+        rongQiShiTu.layer.borderColor = AppColors.borderGold.cgColor
         rongQiShiTu.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
         }
@@ -153,7 +109,7 @@ class SelPeta: UITableViewCell {
         // 名称
         rongQiShiTu.addSubview(mingChengLabel)
         mingChengLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        mingChengLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
+        mingChengLabel.textColor = AppColors.gold
         mingChengLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(15)
             make.left.equalToSuperview().offset(15)
@@ -173,7 +129,7 @@ class SelPeta: UITableViewCell {
         // Boss信息
         rongQiShiTu.addSubview(bossLabel)
         bossLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        bossLabel.textColor = UIColor(red: 1.0, green: 0.3, blue: 0.3, alpha: 1.0)
+        bossLabel.textColor = AppColors.enemyRed
         bossLabel.snp.makeConstraints { make in
             make.top.equalTo(miaoShuLabel.snp.bottom).offset(8)
             make.left.equalToSuperview().offset(15)
@@ -182,7 +138,7 @@ class SelPeta: UITableViewCell {
         // 血量
         rongQiShiTu.addSubview(xueLiangLabel)
         xueLiangLabel.font = UIFont.systemFont(ofSize: 12)
-        xueLiangLabel.textColor = .white
+        xueLiangLabel.textColor = AppColors.white
         xueLiangLabel.snp.makeConstraints { make in
             make.top.equalTo(bossLabel.snp.bottom).offset(3)
             make.left.equalToSuperview().offset(15)
@@ -191,7 +147,7 @@ class SelPeta: UITableViewCell {
         // 奖励
         rongQiShiTu.addSubview(jiangLiLabel)
         jiangLiLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        jiangLiLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
+        jiangLiLabel.textColor = AppColors.gold
         jiangLiLabel.snp.makeConstraints { make in
             make.centerY.equalTo(xueLiangLabel)
             make.right.equalToSuperview().offset(-15)

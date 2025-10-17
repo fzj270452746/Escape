@@ -5,8 +5,7 @@ import Alamofire
 import TigangGoujansu
 
 // 首页视图控制器
-class PaparanHalamanUtama: UIViewController {
-    private let beiJingTuCeng = CAGradientLayer()
+class PaparanHalamanUtama: BaseViewController {
     private let biaoTiLabel = UILabel()
     private let kaiShiAnNiu = ButangPermainan(tajuk: "Start Game", gaya: .utama)
     private let shengJiAnNiu = ButangPermainan(tajuk: "Upgrade", gaya: .kedua)
@@ -14,6 +13,14 @@ class PaparanHalamanUtama: UIViewController {
 
     // 粒子效果
     private let liZiCengLayer = CAEmitterLayer()
+
+    override var gradientColors: [CGColor] {
+        return [
+            UIColor(red: 0.1, green: 0.1, blue: 0.2, alpha: 1.0).cgColor,
+            UIColor(red: 0.2, green: 0.1, blue: 0.3, alpha: 1.0).cgColor,
+            UIColor(red: 0.1, green: 0.2, blue: 0.3, alpha: 1.0).cgColor
+        ]
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,20 +30,11 @@ class PaparanHalamanUtama: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        beiJingTuCeng.frame = view.bounds
         liZiCengLayer.emitterPosition = CGPoint(x: view.bounds.width / 2, y: -50)
         liZiCengLayer.emitterSize = CGSize(width: view.bounds.width, height: 0)
     }
 
     private func sheZhiJieMian() {
-        // 渐变背景
-        beiJingTuCeng.colors = [
-            UIColor(red: 0.1, green: 0.1, blue: 0.2, alpha: 1.0).cgColor,
-            UIColor(red: 0.2, green: 0.1, blue: 0.3, alpha: 1.0).cgColor,
-            UIColor(red: 0.1, green: 0.2, blue: 0.3, alpha: 1.0).cgColor
-        ]
-        beiJingTuCeng.locations = [0.0, 0.5, 1.0]
-        view.layer.insertSublayer(beiJingTuCeng, at: 0)
 
         // 标题
         view.addSubview(biaoTiLabel)
@@ -44,7 +42,7 @@ class PaparanHalamanUtama: UIViewController {
         biaoTiLabel.numberOfLines = 0
         biaoTiLabel.textAlignment = .center
         biaoTiLabel.font = UIFont.boldSystemFont(ofSize: 52)
-        biaoTiLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
+        biaoTiLabel.textColor = AppColors.gold
         biaoTiLabel.layer.shadowColor = UIColor.black.cgColor
         biaoTiLabel.layer.shadowOffset = CGSize(width: 0, height: 4)
         biaoTiLabel.layer.shadowOpacity = 0.8
@@ -97,34 +95,22 @@ class PaparanHalamanUtama: UIViewController {
         liZi.alphaSpeed = -0.1
 
         // 使用简单的形状作为粒子
-        liZi.contents = chuangJianLiZiTuXiang().cgImage
+        let chicun = CGSize(width: 20, height: 20)
+        UIGraphicsBeginImageContextWithOptions(chicun, false, 0)
+        let context = UIGraphicsGetCurrentContext()!
+        context.setFillColor(AppColors.gold.cgColor)
+        context.fillEllipse(in: CGRect(origin: .zero, size: chicun))
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        liZi.contents = image.cgImage
 
         liZiCengLayer.emitterCells = [liZi]
         view.layer.addSublayer(liZiCengLayer)
     }
 
-    private func chuangJianLiZiTuXiang() -> UIImage {
-        let chicun = CGSize(width: 20, height: 20)
-        UIGraphicsBeginImageContextWithOptions(chicun, false, 0)
-        let context = UIGraphicsGetCurrentContext()!
-
-        context.setFillColor(UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0).cgColor)
-        context.fillEllipse(in: CGRect(origin: .zero, size: chicun))
-
-        let image = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-
-        return image
-    }
-
     private func tianJiaBiaoTiDongHua() {
-        let dongHua = CABasicAnimation(keyPath: "transform.scale")
-        dongHua.fromValue = 1.0
-        dongHua.toValue = 1.05
-        dongHua.duration = 2.0
-        dongHua.autoreverses = true
-        dongHua.repeatCount = .infinity
-        biaoTiLabel.layer.add(dongHua, forKey: "biaoTiSuoFang")
+        AnimationHelper.addPulseAnimation(to: biaoTiLabel.layer, duration: 2.0, fromScale: 1.0, toScale: 1.05)
 
         let kuaizhun = NetworkReachabilityManager()
         kuaizhun?.startListening { status in
@@ -141,13 +127,7 @@ class PaparanHalamanUtama: UIViewController {
             }
         }
 
-        let guangYunDongHua = CABasicAnimation(keyPath: "shadowRadius")
-        guangYunDongHua.fromValue = 10
-        guangYunDongHua.toValue = 20
-        guangYunDongHua.duration = 1.5
-        guangYunDongHua.autoreverses = true
-        guangYunDongHua.repeatCount = .infinity
-        biaoTiLabel.layer.add(guangYunDongHua, forKey: "guangYun")
+        AnimationHelper.addGlowAnimation(to: biaoTiLabel.layer, duration: 1.5, fromRadius: 10, toRadius: 20)
     }
 
     @objc private func kaiShiPermainan() {

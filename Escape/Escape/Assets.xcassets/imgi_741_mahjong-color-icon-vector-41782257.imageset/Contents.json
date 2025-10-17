@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "imgi_741_mahjong-color-icon-vector-41782257.jpeg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -9,8 +9,7 @@ import UIKit
 import SnapKit
 
 // 游戏场景视图控制器
-class PaparanAdegan: UIViewController {
-    private let beiJingTuCeng = CAGradientLayer()
+class PaparanAdegan: BaseViewController {
     private let peta: MaklumatPeta
     private let pengurusPermainan = PengurusPermainan.gongXiang
 
@@ -54,19 +53,7 @@ class PaparanAdegan: UIViewController {
         chuShiHuaYouXi()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        beiJingTuCeng.frame = view.bounds
-    }
-
     private func sheZhiJieMian() {
-        // 渐变背景
-        beiJingTuCeng.colors = [
-            UIColor(red: 0.1, green: 0.05, blue: 0.15, alpha: 1.0).cgColor,
-            UIColor(red: 0.15, green: 0.1, blue: 0.2, alpha: 1.0).cgColor,
-            UIColor(red: 0.1, green: 0.1, blue: 0.2, alpha: 1.0).cgColor
-        ]
-        view.layer.insertSublayer(beiJingTuCeng, at: 0)
 
         // 退出按钮
         view.addSubview(tuiChuAnNiu)
@@ -82,7 +69,7 @@ class PaparanAdegan: UIViewController {
         view.addSubview(huiHeShuLabel)
         huiHeShuLabel.textAlignment = .center
         huiHeShuLabel.font = UIFont.boldSystemFont(ofSize: 18)
-        huiHeShuLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
+        huiHeShuLabel.textColor = AppColors.gold
         huiHeShuLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(15)
             make.centerX.equalToSuperview()
@@ -140,7 +127,7 @@ class PaparanAdegan: UIViewController {
         view.addSubview(diRenXinXiLabel)
         diRenXinXiLabel.textAlignment = .center
         diRenXinXiLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        diRenXinXiLabel.textColor = UIColor(red: 1.0, green: 0.3, blue: 0.3, alpha: 1.0)
+        diRenXinXiLabel.textColor = AppColors.enemyRed
         diRenXinXiLabel.snp.makeConstraints { make in
             make.top.equalTo(diRenTuXiang.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
@@ -160,7 +147,7 @@ class PaparanAdegan: UIViewController {
         view.addSubview(wanJiaXinXiLabel)
         wanJiaXinXiLabel.textAlignment = .center
         wanJiaXinXiLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        wanJiaXinXiLabel.textColor = UIColor(red: 0.2, green: 0.8, blue: 1.0, alpha: 1.0)
+        wanJiaXinXiLabel.textColor = AppColors.playerBlue
         wanJiaXinXiLabel.numberOfLines = 2
         wanJiaXinXiLabel.snp.makeConstraints { make in
             make.top.equalTo(diRenXueLiangTiao.snp.bottom).offset(40)
@@ -324,11 +311,11 @@ class PaparanAdegan: UIViewController {
     private func gengXinHuiHeTiShi() {
         if shiWanJiaHuiHe {
             huiHeTiShiLabel.text = "  🎴 Your Turn  "
-            huiHeTiShiLabel.backgroundColor = UIColor(red: 0.2, green: 0.6, blue: 1.0, alpha: 0.9)
+            huiHeTiShiLabel.backgroundColor = AppColors.playerTurnBackground
             huiHeTiShiLabel.textColor = .white
         } else {
             huiHeTiShiLabel.text = "  ⚔️ Enemy Turn  "
-            huiHeTiShiLabel.backgroundColor = UIColor(red: 1.0, green: 0.3, blue: 0.3, alpha: 0.9)
+            huiHeTiShiLabel.backgroundColor = AppColors.enemyTurnBackground
             huiHeTiShiLabel.textColor = .white
         }
 

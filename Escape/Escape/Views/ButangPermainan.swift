@@ -28,19 +28,19 @@ class ButangPermainan: UIButton {
     private func sheZhiJieMian(tajuk: String, gaya: GayaButang) {
         setTitle(tajuk, for: .normal)
         titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        setTitleColor(.white, for: .normal)
+        setTitleColor(AppColors.white, for: .normal)
         layer.cornerRadius = 12
 
         let yanse: UIColor
         switch gaya {
         case .utama:
-            yanse = UIColor(red: 0.8, green: 0.6, blue: 0.2, alpha: 1.0)
+            yanse = AppColors.primaryButton
         case .kedua:
-            yanse = UIColor(red: 0.2, green: 0.5, blue: 0.8, alpha: 1.0)
+            yanse = AppColors.secondaryButton
         case .bahaya:
-            yanse = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0)
+            yanse = AppColors.dangerButton
         case .berjaya:
-            yanse = UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0)
+            yanse = AppColors.successButton
         }
 
         backgroundColor = yanse

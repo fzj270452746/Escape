@@ -9,10 +9,7 @@ import UIKit
 import SnapKit
 
 // 升级视图控制器
-class PaparanNaikTaraf: UIViewController {
-    private let beiJingTuCeng = CAGradientLayer()
-    private let biaoTiLabel = UILabel()
-    private let fanHuiAnNiu = ButangPermainan(tajuk: "← Back", gaya: .kedua)
+class PaparanNaikTaraf: BaseViewController {
     private let jinBiLabel = UILabel()
 
     private let xueLiangKa = KadNaikTaraf()
@@ -24,6 +21,8 @@ class PaparanNaikTaraf: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTitle("UPGRADE")
+        setupBackButton()
         sheZhiJieMian()
     }
 
@@ -32,47 +31,14 @@ class PaparanNaikTaraf: UIViewController {
         gengXinJieMian()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        beiJingTuCeng.frame = view.bounds
-    }
-
     private func sheZhiJieMian() {
-        // 渐变背景
-        beiJingTuCeng.colors = [
-            UIColor(red: 0.1, green: 0.1, blue: 0.2, alpha: 1.0).cgColor,
-            UIColor(red: 0.15, green: 0.1, blue: 0.25, alpha: 1.0).cgColor
-        ]
-        view.layer.insertSublayer(beiJingTuCeng, at: 0)
-
-        // 标题
-        view.addSubview(biaoTiLabel)
-        biaoTiLabel.text = "UPGRADE"
-        biaoTiLabel.textAlignment = .center
-        biaoTiLabel.font = UIFont.boldSystemFont(ofSize: 28)
-        biaoTiLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
-        biaoTiLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.centerX.equalToSuperview()
-        }
-
-        // 返回按钮
-        view.addSubview(fanHuiAnNiu)
-        fanHuiAnNiu.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.left.equalToSuperview().offset(20)
-            make.width.equalTo(100)
-            make.height.equalTo(44)
-        }
-        fanHuiAnNiu.addTarget(self, action: #selector(fanHui), for: .touchUpInside)
-
         // 金币显示
         view.addSubview(jinBiLabel)
         jinBiLabel.textAlignment = .center
         jinBiLabel.font = UIFont.boldSystemFont(ofSize: 24)
-        jinBiLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
+        jinBiLabel.textColor = AppColors.gold
         jinBiLabel.snp.makeConstraints { make in
-            make.top.equalTo(biaoTiLabel.snp.bottom).offset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
         }
 
@@ -207,27 +173,11 @@ class PaparanNaikTaraf: UIViewController {
     }
 
     private func xianShiChengGongTiShi(xiaoXi: String) {
-        let dialog = DialogTersuai()
-        dialog.tunjuk(
-            zaiShiTu: view,
-            tajuk: "Success!",
-            kandungan: xiaoXi,
-            anNius: [("OK", UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0), {})]
-        )
+        showSuccessDialog(message: xiaoXi)
     }
 
     private func xianShiShiBaiTiShi() {
-        let dialog = DialogTersuai()
-        dialog.tunjuk(
-            zaiShiTu: view,
-            tajuk: "Insufficient Coins",
-            kandungan: "You need more coins to upgrade!",
-            anNius: [("OK", UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0), {})]
-        )
-    }
-
-    @objc private func fanHui() {
-        dismiss(animated: true)
+        showErrorDialog(title: "Insufficient Coins", message: "You need more coins to upgrade!")
     }
 }
 
@@ -254,10 +204,10 @@ class KadNaikTaraf: UIView {
     }
 
     private func sheZhiJieMian() {
-        backgroundColor = UIColor(red: 0.15, green: 0.15, blue: 0.2, alpha: 0.9)
+        backgroundColor = AppColors.cardBackground
         layer.cornerRadius = 15
         layer.borderWidth = 2
-        layer.borderColor = UIColor(red: 0.8, green: 0.6, blue: 0.2, alpha: 1.0).cgColor
+        layer.borderColor = AppColors.borderGold.cgColor
 
         // 图标
         addSubview(tubiaoLabel)
@@ -271,7 +221,7 @@ class KadNaikTaraf: UIView {
         // 标题
         addSubview(biaoTiLabel)
         biaoTiLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        biaoTiLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
+        biaoTiLabel.textColor = AppColors.gold
         biaoTiLabel.textAlignment = .center
         biaoTiLabel.snp.makeConstraints { make in
             make.top.equalTo(tubiaoLabel.snp.bottom).offset(5)
@@ -281,7 +231,7 @@ class KadNaikTaraf: UIView {
         // 当前值
         addSubview(dangQianZhiLabel)
         dangQianZhiLabel.font = UIFont.boldSystemFont(ofSize: 24)
-        dangQianZhiLabel.textColor = .white
+        dangQianZhiLabel.textColor = AppColors.white
         dangQianZhiLabel.textAlignment = .center
         dangQianZhiLabel.snp.makeConstraints { make in
             make.top.equalTo(biaoTiLabel.snp.bottom).offset(10)
@@ -301,7 +251,7 @@ class KadNaikTaraf: UIView {
         // 价格
         addSubview(jiGeLabel)
         jiGeLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        jiGeLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
+        jiGeLabel.textColor = AppColors.gold
         jiGeLabel.textAlignment = .center
         jiGeLabel.snp.makeConstraints { make in
             make.top.equalTo(miaoShuLabel.snp.bottom).offset(10)

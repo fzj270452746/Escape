@@ -25,7 +25,7 @@ class PaparanKepingMahjong: UIView {
     }
 
     private func sheZhiJieMian() {
-        backgroundColor = .white
+        backgroundColor = AppColors.white
         layer.cornerRadius = 8
         layer.borderWidth = 2
         layer.borderColor = UIColor.darkGray.cgColor
@@ -49,9 +49,9 @@ class PaparanKepingMahjong: UIView {
         let bianHua = {
             if xuanZhong {
                 self.transform = CGAffineTransform(translationX: 0, y: -15)
-                self.layer.borderColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0).cgColor
+                self.layer.borderColor = AppColors.gold.cgColor
                 self.layer.borderWidth = 3
-                self.layer.shadowColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0).cgColor
+                self.layer.shadowColor = AppColors.gold.cgColor
                 self.layer.shadowOpacity = 0.8
                 self.layer.shadowRadius = 8
             } else {

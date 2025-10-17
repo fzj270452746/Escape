@@ -9,56 +9,22 @@ import UIKit
 import SnapKit
 
 // 设置视图控制器
-class PaparanTetapan: UIViewController {
-    private let beiJingTuCeng = CAGradientLayer()
-    private let biaoTiLabel = UILabel()
-    private let fanHuiAnNiu = ButangPermainan(tajuk: "← Back", gaya: .kedua)
+class PaparanTetapan: BaseViewController {
     private let gunDongShiTu = UIScrollView()
     private let neiRongShiTu = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTitle("SETTINGS")
+        setupBackButton()
         sheZhiJieMian()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        beiJingTuCeng.frame = view.bounds
-    }
-
     private func sheZhiJieMian() {
-        // 渐变背景
-        beiJingTuCeng.colors = [
-            UIColor(red: 0.1, green: 0.1, blue: 0.2, alpha: 1.0).cgColor,
-            UIColor(red: 0.15, green: 0.1, blue: 0.25, alpha: 1.0).cgColor
-        ]
-        view.layer.insertSublayer(beiJingTuCeng, at: 0)
-
-        // 标题
-        view.addSubview(biaoTiLabel)
-        biaoTiLabel.text = "SETTINGS"
-        biaoTiLabel.textAlignment = .center
-        biaoTiLabel.font = UIFont.boldSystemFont(ofSize: 28)
-        biaoTiLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
-        biaoTiLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.centerX.equalToSuperview()
-        }
-
-        // 返回按钮
-        view.addSubview(fanHuiAnNiu)
-        fanHuiAnNiu.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.left.equalToSuperview().offset(20)
-            make.width.equalTo(100)
-            make.height.equalTo(44)
-        }
-        fanHuiAnNiu.addTarget(self, action: #selector(fanHui), for: .touchUpInside)
-
         // 滚动视图
         view.addSubview(gunDongShiTu)
         gunDongShiTu.snp.makeConstraints { make in
-            make.top.equalTo(biaoTiLabel.snp.bottom).offset(30)
+            make.top.equalTo(titleLabel.snp.bottom).offset(30)
             make.left.right.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
@@ -246,84 +212,35 @@ class PaparanTetapan: UIViewController {
     }
 
     private func chuangJianXinXiKuang() -> UIView {
-        let kuang = UIView()
-        kuang.backgroundColor = UIColor(red: 0.15, green: 0.15, blue: 0.2, alpha: 0.9)
-        kuang.layer.cornerRadius = 15
-        kuang.layer.borderWidth = 2
-        kuang.layer.borderColor = UIColor(red: 0.8, green: 0.6, blue: 0.2, alpha: 0.5).cgColor
-        return kuang
+        return UIView.createCardContainer(cornerRadius: 15, borderWidth: 2)
     }
 
     private func chuangJianBiaoTi(wenZi: String) -> UILabel {
-        let label = UILabel()
-        label.text = wenZi
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
-        return label
+        return UIView.createLabel(text: wenZi, fontSize: 18, color: AppColors.gold, isBold: true)
     }
 
     private func chuangJianNeiRongWenZi(wenZi: String) -> UILabel {
-        let label = UILabel()
-        label.text = wenZi
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .white
-        label.numberOfLines = 0
-        return label
+        return UIView.createLabel(text: wenZi, fontSize: 14, color: AppColors.white)
     }
 
     private func tiJiaoFanKui(neiRong: String) {
-        // 这里可以实现真实的反馈提交逻辑
-        let dialog = DialogTersuai()
-        dialog.tunjuk(
-            zaiShiTu: view,
-            tajuk: "Thank You!",
-            kandungan: "Your feedback has been saved locally.",
-            anNius: [("OK", UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0), {})]
-        )
-
-        // 保存到UserDefaults
+        showSuccessDialog(title: "Thank You!", message: "Your feedback has been saved locally.")
         UserDefaults.standard.set(neiRong, forKey: "userFeedback_\(Date().timeIntervalSince1970)")
     }
 
     private func pingFen(fenShu: Int) {
-        let dialog = DialogTersuai()
-        dialog.tunjuk(
-            zaiShiTu: view,
-            tajuk: "Thank You!",
-            kandungan: "You rated us \(fenShu) star\(fenShu > 1 ? "s" : "")!",
-            anNius: [("OK", UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0), {})]
-        )
-
+        showSuccessDialog(title: "Thank You!", message: "You rated us \(fenShu) star\(fenShu > 1 ? "s" : "")!")
         UserDefaults.standard.set(fenShu, forKey: "userRating")
     }
 
     @objc private func chongZhiYouXi() {
-        let dialog = DialogTersuai()
-        dialog.tunjuk(
-            zaiShiTu: view,
-            tajuk: "Warning!",
-            kandungan: "This will reset all your progress. Are you sure?",
-            anNius: [
-                ("Cancel", UIColor(red: 0.2, green: 0.5, blue: 0.8, alpha: 1.0), {}),
-                ("Reset", UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0), { [weak self] in
-                    PengurusPermainan.gongXiang.setelSemulakanPermainan()
-                    self?.xianShiChongZhiChengGong()
-                })
-            ]
+        showConfirmDialog(
+            title: "Warning!",
+            message: "This will reset all your progress. Are you sure?",
+            onConfirm: { [weak self] in
+                PengurusPermainan.gongXiang.setelSemulakanPermainan()
+                self?.showSuccessDialog(title: "Reset Complete", message: "Your game data has been reset.")
+            }
         )
-    }
-
-    private func xianShiChongZhiChengGong() {
-        let dialog = DialogTersuai()
-        dialog.tunjuk(
-            zaiShiTu: view,
-            tajuk: "Reset Complete",
-            kandungan: "Your game data has been reset.",
-            anNius: [("OK", UIColor(red: 0.2, green: 0.7, blue: 0.3, alpha: 1.0), {})]
-        )
-    }
-
-    @objc private func fanHui() {
-        dismiss(animated: true)
     }
 }

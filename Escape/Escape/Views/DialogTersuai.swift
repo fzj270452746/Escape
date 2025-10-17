@@ -29,10 +29,10 @@ class DialogTersuai: UIView {
 
         // 内容视图
         addSubview(neiRongShiTu)
-        neiRongShiTu.backgroundColor = UIColor(red: 0.15, green: 0.15, blue: 0.2, alpha: 1.0)
+        neiRongShiTu.backgroundColor = AppColors.cardBackground
         neiRongShiTu.layer.cornerRadius = 20
         neiRongShiTu.layer.borderWidth = 3
-        neiRongShiTu.layer.borderColor = UIColor(red: 0.8, green: 0.6, blue: 0.2, alpha: 1.0).cgColor
+        neiRongShiTu.layer.borderColor = AppColors.borderGold.cgColor
         neiRongShiTu.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalTo(300)
@@ -42,7 +42,7 @@ class DialogTersuai: UIView {
         neiRongShiTu.addSubview(biaoTiLabel)
         biaoTiLabel.textAlignment = .center
         biaoTiLabel.font = UIFont.boldSystemFont(ofSize: 24)
-        biaoTiLabel.textColor = UIColor(red: 1.0, green: 0.84, blue: 0.0, alpha: 1.0)
+        biaoTiLabel.textColor = AppColors.gold
         biaoTiLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(20)
             make.left.right.equalToSuperview().inset(20)
@@ -52,7 +52,7 @@ class DialogTersuai: UIView {
         neiRongShiTu.addSubview(xiaoXiLabel)
         xiaoXiLabel.textAlignment = .center
         xiaoXiLabel.font = UIFont.systemFont(ofSize: 16)
-        xiaoXiLabel.textColor = .white
+        xiaoXiLabel.textColor = AppColors.white
         xiaoXiLabel.numberOfLines = 0
         xiaoXiLabel.snp.makeConstraints { make in
             make.top.equalTo(biaoTiLabel.snp.bottom).offset(20)
@@ -115,7 +115,7 @@ class DialogTersuai: UIView {
         let anNiu = UIButton(type: .system)
         anNiu.setTitle(teks, for: .normal)
         anNiu.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        anNiu.setTitleColor(.white, for: .normal)
+        anNiu.setTitleColor(AppColors.white, for: .normal)
         anNiu.backgroundColor = yanse
         anNiu.layer.cornerRadius = 10
         anNiu.layer.shadowColor = yanse.cgColor
